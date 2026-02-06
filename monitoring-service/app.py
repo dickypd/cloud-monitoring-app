@@ -1,17 +1,17 @@
-from fastapi import FastAPI
 import psutil
-import socket
+from fastapi import FastAPI
 
 app = FastAPI()
 
+# Endpoint utama
 @app.get("/")
 def home():
-    return {"status": "Monitoring Service Active"}
+    return {"message": "Cloud Monitoring App Running 🚀"}
 
+# 🔥 Endpoint metrics (INI YANG KAMU CARI)
 @app.get("/metrics")
 def metrics():
     return {
-        "cpu_usage": psutil.cpu_percent(),
-        "memory_usage": psutil.virtual_memory().percent,
-        "hostname": socket.gethostname()
+        "cpu_usage_percent": psutil.cpu_percent(),
+        "memory_usage_percent": psutil.virtual_memory().percent
     }
