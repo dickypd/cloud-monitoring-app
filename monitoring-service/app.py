@@ -6,7 +6,7 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"service": "Monitoring Service Running"}
+    return {"status": "Monitoring Service Active"}
 
 @app.get("/metrics")
 def metrics():
