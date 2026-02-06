@@ -1,28 +1,17 @@
 from fastapi import FastAPI
-import pika
-import json
+import psutil
+import socket
 
 app = FastAPI()
 
-def send_event(message):
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(host='rabbitmq')
-    )
-    channel = connection.channel()
-    channel.queue_declare(queue='alerts')
-    channel.basic_publish(
-        exchange='',
-        routing_key='alerts',
-        body=json.dumps(message)
-    )
-    connection.close()
+@app.get("/")
+def home():
+    return {"service": "Monitoring Service Running"}
 
-@app.get("/devices")
-def devices():
-    data = {"device": "Switch-1", "status": "down"}
-    send_event(data)
-    return [data]
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+@app.get("/metrics")
+def metrics():
+    return {
+        "cpu_usage": psutil.cpu_percent(),
+        "memory_usage": psutil.virtual_memory().percent,
+        "hostname": socket.gethostname()
+    }
